@@ -1,0 +1,84 @@
+To create a JUnit 5 Mockito test for the CreditRiskMonitoringEvent class and ensure Lombok's @Data annotation is covered, you can create unit tests for the generated getters, setters, equals, hashCode, and toString methods. Here's an example:
+
+package com.abnamro.crms.lpdrisksignaladministration.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+import java.math.BigInteger;
+
+@ExtendWith(MockitoExtension.class)
+class CreditRiskMonitoringEventTest {
+
+    @InjectMocks
+    private CreditRiskMonitoringEvent creditRiskMonitoringEvent;
+
+    private static final BigInteger EVENT_IDENTIFIER = BigInteger.valueOf(1);
+    private static final String SUBJECT_ID = "sub123";
+    private static final String SUBJECT_CONTEXT = "context1";
+    private static final String SUBJECT_ADDITIONAL_CONTEXT = "addContext";
+    private static final String EVENT_CODE = "E001";
+    private static final String EVENT_STATUS = "PENDING";
+
+    @BeforeEach
+    void setUp() {
+        creditRiskMonitoringEvent = new CreditRiskMonitoringEvent();
+        creditRiskMonitoringEvent.setEventIdentifier(EVENT_IDENTIFIER);
+        creditRiskMonitoringEvent.setSubjectId(SUBJECT_ID);
+        creditRiskMonitoringEvent.setSubjectContext(SUBJECT_CONTEXT);
+        creditRiskMonitoringEvent.setSubjectAdditionalContext(SUBJECT_ADDITIONAL_CONTEXT);
+        creditRiskMonitoringEvent.setEventCode(EVENT_CODE);
+        creditRiskMonitoringEvent.setEventStatus(EVENT_STATUS);
+    }
+
+    @Test
+    void testGettersAndSetters() {
+        assertEquals(EVENT_IDENTIFIER, creditRiskMonitoringEvent.getEventIdentifier());
+        assertEquals(SUBJECT_ID, creditRiskMonitoringEvent.getSubjectId());
+        assertEquals(SUBJECT_CONTEXT, creditRiskMonitoringEvent.getSubjectContext());
+        assertEquals(SUBJECT_ADDITIONAL_CONTEXT, creditRiskMonitoringEvent.getSubjectAdditionalContext());
+        assertEquals(EVENT_CODE, creditRiskMonitoringEvent.getEventCode());
+        assertEquals(EVENT_STATUS, creditRiskMonitoringEvent.getEventStatus());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        CreditRiskMonitoringEvent anotherEvent = new CreditRiskMonitoringEvent();
+        anotherEvent.setEventIdentifier(EVENT_IDENTIFIER);
+        anotherEvent.setSubjectId(SUBJECT_ID);
+        anotherEvent.setSubjectContext(SUBJECT_CONTEXT);
+        anotherEvent.setSubjectAdditionalContext(SUBJECT_ADDITIONAL_CONTEXT);
+        anotherEvent.setEventCode(EVENT_CODE);
+        anotherEvent.setEventStatus(EVENT_STATUS);
+
+        assertEquals(creditRiskMonitoringEvent, anotherEvent);
+        assertEquals(creditRiskMonitoringEvent.hashCode(), anotherEvent.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        String expectedString = "CreditRiskMonitoringEvent(eventIdentifier=1, subjectId=sub123, subjectContext=context1, subjectAdditionalContext=addContext, eventCode=E001, eventStatus=PENDING)";
+        assertEquals(expectedString, creditRiskMonitoringEvent.toString());
+    }
+}
+
+Key Components:
+
+1. @InjectMocks is used to initialize the CreditRiskMonitoringEvent class.
+
+
+2. Tests for Lombok-generated methods:
+
+Getters and setters are tested using the testGettersAndSetters() method.
+
+equals() and hashCode() methods are tested using the testEqualsAndHashCode() method.
+
+The toString() method is tested using the testToString() method.
+
+
+
+
+This test ensures that the functionality provided by Lombok's @Data annotation is covered.
