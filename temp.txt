@@ -1,5 +1,3 @@
-To create a JUnit 5 Mockito test for the CreditRiskMonitoringEvent class and ensure Lombok's @Data annotation is covered, you can create unit tests for the generated getters, setters, equals, hashCode, and toString methods. Here's an example:
-
 package com.abnamro.crms.lpdrisksignaladministration.model;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,77 +6,51 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
-import java.math.BigInteger;
+import java.util.Date;
 
 @ExtendWith(MockitoExtension.class)
-class CreditRiskMonitoringEventTest {
+class CreditAgreementTest {
 
     @InjectMocks
-    private CreditRiskMonitoringEvent creditRiskMonitoringEvent;
+    private CreditAgreement creditAgreement;
 
-    private static final BigInteger EVENT_IDENTIFIER = BigInteger.valueOf(1);
-    private static final String SUBJECT_ID = "sub123";
-    private static final String SUBJECT_CONTEXT = "context1";
-    private static final String SUBJECT_ADDITIONAL_CONTEXT = "addContext";
-    private static final String EVENT_CODE = "E001";
-    private static final String EVENT_STATUS = "PENDING";
+    private static final Integer AGREEMENT_IDENTIFIER = 1001;
+    private static final String CREDIT_AGREEMENT_ID = "CA12345";
+    private static final String ADMINISTRATION_STATUS = "ACTIVE";
+    private static final Date START_DATE = new Date();
 
     @BeforeEach
     void setUp() {
-        creditRiskMonitoringEvent = new CreditRiskMonitoringEvent();
-        creditRiskMonitoringEvent.setEventIdentifier(EVENT_IDENTIFIER);
-        creditRiskMonitoringEvent.setSubjectId(SUBJECT_ID);
-        creditRiskMonitoringEvent.setSubjectContext(SUBJECT_CONTEXT);
-        creditRiskMonitoringEvent.setSubjectAdditionalContext(SUBJECT_ADDITIONAL_CONTEXT);
-        creditRiskMonitoringEvent.setEventCode(EVENT_CODE);
-        creditRiskMonitoringEvent.setEventStatus(EVENT_STATUS);
+        creditAgreement = new CreditAgreement();
+        creditAgreement.setAgreementIdentifier(AGREEMENT_IDENTIFIER);
+        creditAgreement.setCreditAgreementId(CREDIT_AGREEMENT_ID);
+        creditAgreement.setAdministrationStatus(ADMINISTRATION_STATUS);
+        creditAgreement.setCreditAgreementStartDate(START_DATE);
     }
 
     @Test
     void testGettersAndSetters() {
-        assertEquals(EVENT_IDENTIFIER, creditRiskMonitoringEvent.getEventIdentifier());
-        assertEquals(SUBJECT_ID, creditRiskMonitoringEvent.getSubjectId());
-        assertEquals(SUBJECT_CONTEXT, creditRiskMonitoringEvent.getSubjectContext());
-        assertEquals(SUBJECT_ADDITIONAL_CONTEXT, creditRiskMonitoringEvent.getSubjectAdditionalContext());
-        assertEquals(EVENT_CODE, creditRiskMonitoringEvent.getEventCode());
-        assertEquals(EVENT_STATUS, creditRiskMonitoringEvent.getEventStatus());
+        assertEquals(AGREEMENT_IDENTIFIER, creditAgreement.getAgreementIdentifier());
+        assertEquals(CREDIT_AGREEMENT_ID, creditAgreement.getCreditAgreementId());
+        assertEquals(ADMINISTRATION_STATUS, creditAgreement.getAdministrationStatus());
+        assertEquals(START_DATE, creditAgreement.getCreditAgreementStartDate());
     }
 
     @Test
     void testEqualsAndHashCode() {
-        CreditRiskMonitoringEvent anotherEvent = new CreditRiskMonitoringEvent();
-        anotherEvent.setEventIdentifier(EVENT_IDENTIFIER);
-        anotherEvent.setSubjectId(SUBJECT_ID);
-        anotherEvent.setSubjectContext(SUBJECT_CONTEXT);
-        anotherEvent.setSubjectAdditionalContext(SUBJECT_ADDITIONAL_CONTEXT);
-        anotherEvent.setEventCode(EVENT_CODE);
-        anotherEvent.setEventStatus(EVENT_STATUS);
+        CreditAgreement anotherCreditAgreement = new CreditAgreement();
+        anotherCreditAgreement.setAgreementIdentifier(AGREEMENT_IDENTIFIER);
+        anotherCreditAgreement.setCreditAgreementId(CREDIT_AGREEMENT_ID);
+        anotherCreditAgreement.setAdministrationStatus(ADMINISTRATION_STATUS);
+        anotherCreditAgreement.setCreditAgreementStartDate(START_DATE);
 
-        assertEquals(creditRiskMonitoringEvent, anotherEvent);
-        assertEquals(creditRiskMonitoringEvent.hashCode(), anotherEvent.hashCode());
+        assertEquals(creditAgreement, anotherCreditAgreement);
+        assertEquals(creditAgreement.hashCode(), anotherCreditAgreement.hashCode());
     }
 
     @Test
     void testToString() {
-        String expectedString = "CreditRiskMonitoringEvent(eventIdentifier=1, subjectId=sub123, subjectContext=context1, subjectAdditionalContext=addContext, eventCode=E001, eventStatus=PENDING)";
-        assertEquals(expectedString, creditRiskMonitoringEvent.toString());
+        String expectedString = "CreditAgreement(agreementIdentifier=1001, creditAgreementId=CA12345, administrationStatus=ACTIVE, creditAgreementStartDate=" + START_DATE + ")";
+        assertEquals(expectedString, creditAgreement.toString());
     }
 }
-
-Key Components:
-
-1. @InjectMocks is used to initialize the CreditRiskMonitoringEvent class.
-
-
-2. Tests for Lombok-generated methods:
-
-Getters and setters are tested using the testGettersAndSetters() method.
-
-equals() and hashCode() methods are tested using the testEqualsAndHashCode() method.
-
-The toString() method is tested using the testToString() method.
-
-
-
-
-This test ensures that the functionality provided by Lombok's @Data annotation is covered.
