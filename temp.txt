@@ -6,51 +6,50 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
-import java.util.Date;
 
 @ExtendWith(MockitoExtension.class)
-class CreditAgreementTest {
+class LPDControlTest {
 
     @InjectMocks
-    private CreditAgreement creditAgreement;
+    private LPDControl lpdControl;
 
-    private static final Integer AGREEMENT_IDENTIFIER = 1001;
-    private static final String CREDIT_AGREEMENT_ID = "CA12345";
-    private static final String ADMINISTRATION_STATUS = "ACTIVE";
-    private static final Date START_DATE = new Date();
+    private static final Integer LPD_CONTROL_IDENTIFIER = 123;
+    private static final String FACILITY_IDENTIFIER = "FAC123";
+    private static final String INPUT_MESSAGE = "Test Input Message";
+    private static final String ERROR_MESSAGE = "Test Error Message";
 
     @BeforeEach
     void setUp() {
-        creditAgreement = new CreditAgreement();
-        creditAgreement.setAgreementIdentifier(AGREEMENT_IDENTIFIER);
-        creditAgreement.setCreditAgreementId(CREDIT_AGREEMENT_ID);
-        creditAgreement.setAdministrationStatus(ADMINISTRATION_STATUS);
-        creditAgreement.setCreditAgreementStartDate(START_DATE);
+        lpdControl = new LPDControl();
+        lpdControl.setLpdControlIdentifier(LPD_CONTROL_IDENTIFIER);
+        lpdControl.setFacilityIdentifier(FACILITY_IDENTIFIER);
+        lpdControl.setInputMessage(INPUT_MESSAGE);
+        lpdControl.setErrorMessage(ERROR_MESSAGE);
     }
 
     @Test
     void testGettersAndSetters() {
-        assertEquals(AGREEMENT_IDENTIFIER, creditAgreement.getAgreementIdentifier());
-        assertEquals(CREDIT_AGREEMENT_ID, creditAgreement.getCreditAgreementId());
-        assertEquals(ADMINISTRATION_STATUS, creditAgreement.getAdministrationStatus());
-        assertEquals(START_DATE, creditAgreement.getCreditAgreementStartDate());
+        assertEquals(LPD_CONTROL_IDENTIFIER, lpdControl.getLpdControlIdentifier());
+        assertEquals(FACILITY_IDENTIFIER, lpdControl.getFacilityIdentifier());
+        assertEquals(INPUT_MESSAGE, lpdControl.getInputMessage());
+        assertEquals(ERROR_MESSAGE, lpdControl.getErrorMessage());
     }
 
     @Test
     void testEqualsAndHashCode() {
-        CreditAgreement anotherCreditAgreement = new CreditAgreement();
-        anotherCreditAgreement.setAgreementIdentifier(AGREEMENT_IDENTIFIER);
-        anotherCreditAgreement.setCreditAgreementId(CREDIT_AGREEMENT_ID);
-        anotherCreditAgreement.setAdministrationStatus(ADMINISTRATION_STATUS);
-        anotherCreditAgreement.setCreditAgreementStartDate(START_DATE);
+        LPDControl anotherLpdControl = new LPDControl();
+        anotherLpdControl.setLpdControlIdentifier(LPD_CONTROL_IDENTIFIER);
+        anotherLpdControl.setFacilityIdentifier(FACILITY_IDENTIFIER);
+        anotherLpdControl.setInputMessage(INPUT_MESSAGE);
+        anotherLpdControl.setErrorMessage(ERROR_MESSAGE);
 
-        assertEquals(creditAgreement, anotherCreditAgreement);
-        assertEquals(creditAgreement.hashCode(), anotherCreditAgreement.hashCode());
+        assertEquals(lpdControl, anotherLpdControl);
+        assertEquals(lpdControl.hashCode(), anotherLpdControl.hashCode());
     }
 
     @Test
     void testToString() {
-        String expectedString = "CreditAgreement(agreementIdentifier=1001, creditAgreementId=CA12345, administrationStatus=ACTIVE, creditAgreementStartDate=" + START_DATE + ")";
-        assertEquals(expectedString, creditAgreement.toString());
+        String expectedString = "LPDControl(lpdControlIdentifier=123, facilityIdentifier=FAC123, inputMessage=Test Input Message, errorMessage=Test Error Message)";
+        assertEquals(expectedString, lpdControl.toString());
     }
 }
