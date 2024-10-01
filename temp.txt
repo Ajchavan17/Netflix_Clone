@@ -4,49 +4,53 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
-class PartyTest {
+class PartyRelationTest {
 
     @InjectMocks
-    private Party party;
+    private PartyRelation partyRelation;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        party = new Party();
+        partyRelation = new PartyRelation();
     }
 
     @Test
     void testGettersAndSetters() {
-        party.setIdentifier(1);
-        party.setPartyId("P001");
-        party.setPartyRoleCode("ROLE123");
+        partyRelation.setIdentifier(1);
+        partyRelation.setPartyIdentifier(2);
+        partyRelation.setAgreementIdentifier(3);
+        partyRelation.setFacilityIdentifier(4);
+        partyRelation.setPartyRoleCode("ROLE123");
+        partyRelation.setIsDeleted('N');
 
-        assertEquals(1, party.getIdentifier());
-        assertEquals("P001", party.getPartyId());
-        assertEquals("ROLE123", party.getPartyRoleCode());
+        assertEquals(1, partyRelation.getIdentifier());
+        assertEquals(2, partyRelation.getPartyIdentifier());
+        assertEquals(3, partyRelation.getAgreementIdentifier());
+        assertEquals(4, partyRelation.getFacilityIdentifier());
+        assertEquals("ROLE123", partyRelation.getPartyRoleCode());
+        assertEquals('N', partyRelation.getIsDeleted());
     }
 
     @Test
     void testEqualsAndHashCode() {
-        Party party1 = new Party();
-        Party party2 = new Party();
+        PartyRelation relation1 = new PartyRelation();
+        PartyRelation relation2 = new PartyRelation();
 
-        party1.setIdentifier(1);
-        party2.setIdentifier(1);
+        relation1.setIdentifier(1);
+        relation2.setIdentifier(1);
 
-        assertEquals(party1, party2);
-        assertEquals(party1.hashCode(), party2.hashCode());
+        assertEquals(relation1, relation2);
+        assertEquals(relation1.hashCode(), relation2.hashCode());
     }
 
     @Test
     void testToString() {
-        party.setIdentifier(1);
-        party.setPartyId("P001");
-        party.setPartyRoleCode("ROLE123");
+        partyRelation.setIdentifier(1);
+        partyRelation.setPartyRoleCode("ROLE123");
 
-        String expected = "Party(identifier=1, partyId=P001, partyRoleCode=ROLE123)";
-        assertTrue(party.toString().contains("identifier=1"));
-        assertTrue(party.toString().contains("partyId=P001"));
-        assertTrue(party.toString().contains("partyRoleCode=ROLE123"));
+        String expected = "PartyRelation(identifier=1, partyRoleCode=ROLE123, ...)";
+        assertTrue(partyRelation.toString().contains("identifier=1"));
+        assertTrue(partyRelation.toString().contains("partyRoleCode=ROLE123"));
     }
 }
