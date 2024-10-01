@@ -1,55 +1,68 @@
-package com.abnamro.crms.lpdrisksignaladministration.model;
-
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockitoAnnotations;
+import java.math.BigDecimal;
+import java.util.Date;
 
-@ExtendWith(MockitoExtension.class)
-class LPDControlTest {
+class LPDRiskSignalTest {
 
     @InjectMocks
-    private LPDControl lpdControl;
-
-    private static final Integer LPD_CONTROL_IDENTIFIER = 123;
-    private static final String FACILITY_IDENTIFIER = "FAC123";
-    private static final String INPUT_MESSAGE = "Test Input Message";
-    private static final String ERROR_MESSAGE = "Test Error Message";
+    private LPDRiskSignal lpdriskSignal;
 
     @BeforeEach
     void setUp() {
-        lpdControl = new LPDControl();
-        lpdControl.setLpdControlIdentifier(LPD_CONTROL_IDENTIFIER);
-        lpdControl.setFacilityIdentifier(FACILITY_IDENTIFIER);
-        lpdControl.setInputMessage(INPUT_MESSAGE);
-        lpdControl.setErrorMessage(ERROR_MESSAGE);
+        MockitoAnnotations.openMocks(this);
+        lpdriskSignal = new LPDRiskSignal();
     }
 
     @Test
     void testGettersAndSetters() {
-        assertEquals(LPD_CONTROL_IDENTIFIER, lpdControl.getLpdControlIdentifier());
-        assertEquals(FACILITY_IDENTIFIER, lpdControl.getFacilityIdentifier());
-        assertEquals(INPUT_MESSAGE, lpdControl.getInputMessage());
-        assertEquals(ERROR_MESSAGE, lpdControl.getErrorMessage());
+        lpdriskSignal.setSignalIdentifier(1);
+        lpdriskSignal.setSubjectId("S123");
+        lpdriskSignal.setSubjectContext("Context");
+        lpdriskSignal.setSubjectAdditionalContext("Additional Context");
+        lpdriskSignal.setOriginalLifetimePD(BigDecimal.valueOf(0.05));
+        lpdriskSignal.setResidualLifetimePD(BigDecimal.valueOf(0.03));
+        lpdriskSignal.setClientSegmentLevel("High");
+        lpdriskSignal.setDetrorationFlag("Y");
+        lpdriskSignal.setAdministrationStatus("Active");
+        lpdriskSignal.setPopulationTimestamp(new Date());
+        lpdriskSignal.setLpdVersion(1);
+
+        assertEquals(1, lpdriskSignal.getSignalIdentifier());
+        assertEquals("S123", lpdriskSignal.getSubjectId());
+        assertEquals("Context", lpdriskSignal.getSubjectContext());
+        assertEquals("Additional Context", lpdriskSignal.getSubjectAdditionalContext());
+        assertEquals(BigDecimal.valueOf(0.05), lpdriskSignal.getOriginalLifetimePD());
+        assertEquals(BigDecimal.valueOf(0.03), lpdriskSignal.getResidualLifetimePD());
+        assertEquals("High", lpdriskSignal.getClientSegmentLevel());
+        assertEquals("Y", lpdriskSignal.getDetrorationFlag());
+        assertEquals("Active", lpdriskSignal.getAdministrationStatus());
+        assertNotNull(lpdriskSignal.getPopulationTimestamp());
+        assertEquals(1, lpdriskSignal.getLpdVersion());
     }
 
     @Test
     void testEqualsAndHashCode() {
-        LPDControl anotherLpdControl = new LPDControl();
-        anotherLpdControl.setLpdControlIdentifier(LPD_CONTROL_IDENTIFIER);
-        anotherLpdControl.setFacilityIdentifier(FACILITY_IDENTIFIER);
-        anotherLpdControl.setInputMessage(INPUT_MESSAGE);
-        anotherLpdControl.setErrorMessage(ERROR_MESSAGE);
+        LPDRiskSignal signal1 = new LPDRiskSignal();
+        LPDRiskSignal signal2 = new LPDRiskSignal();
 
-        assertEquals(lpdControl, anotherLpdControl);
-        assertEquals(lpdControl.hashCode(), anotherLpdControl.hashCode());
+        signal1.setSignalIdentifier(1);
+        signal2.setSignalIdentifier(1);
+
+        assertEquals(signal1, signal2);
+        assertEquals(signal1.hashCode(), signal2.hashCode());
     }
 
     @Test
     void testToString() {
-        String expectedString = "LPDControl(lpdControlIdentifier=123, facilityIdentifier=FAC123, inputMessage=Test Input Message, errorMessage=Test Error Message)";
-        assertEquals(expectedString, lpdControl.toString());
+        lpdriskSignal.setSignalIdentifier(1);
+        lpdriskSignal.setSubjectId("S123");
+
+        String expected = "LPDRiskSignal(signalIdentifier=1, subjectId=S123, ...)";
+        assertTrue(lpdriskSignal.toString().contains("signalIdentifier=1"));
+        assertTrue(lpdriskSignal.toString().contains("subjectId=S123"));
     }
 }
