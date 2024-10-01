@@ -1,56 +1,37 @@
+package com.abnamro.crms.lpdrisksignaladministration.constants;
+
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 
-class PartyRelationTest {
+class LPDControlConstantsTest {
 
-    @InjectMocks
-    private PartyRelation partyRelation;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        partyRelation = new PartyRelation();
+    @Test
+    void testInvalidJsonConstant() {
+        assertEquals("Invalid input message/ unable to parse json", LPDControlConstants.INVALID_JSON);
     }
 
     @Test
-    void testGettersAndSetters() {
-        partyRelation.setIdentifier(1);
-        partyRelation.setPartyIdentifier(2);
-        partyRelation.setAgreementIdentifier(3);
-        partyRelation.setFacilityIdentifier(4);
-        partyRelation.setPartyRoleCode("ROLE123");
-        partyRelation.setIsDeleted('N');
-
-        assertEquals(1, partyRelation.getIdentifier());
-        assertEquals(2, partyRelation.getPartyIdentifier());
-        assertEquals(3, partyRelation.getAgreementIdentifier());
-        assertEquals(4, partyRelation.getFacilityIdentifier());
-        assertEquals("ROLE123", partyRelation.getPartyRoleCode());
-        assertEquals('N', partyRelation.getIsDeleted());
+    void testNoCfEntityConstant() {
+        assertEquals("Input not recognised by CRMS", LPDControlConstants.NO_CF_ENTITY);
     }
 
     @Test
-    void testEqualsAndHashCode() {
-        PartyRelation relation1 = new PartyRelation();
-        PartyRelation relation2 = new PartyRelation();
-
-        relation1.setIdentifier(1);
-        relation2.setIdentifier(1);
-
-        assertEquals(relation1, relation2);
-        assertEquals(relation1.hashCode(), relation2.hashCode());
+    void testNoGfidConstant() {
+        assertEquals("GFID not present/empty", LPDControlConstants.NO_GFID);
     }
 
     @Test
-    void testToString() {
-        partyRelation.setIdentifier(1);
-        partyRelation.setPartyRoleCode("ROLE123");
+    void testInactiveGfidConstant() {
+        assertEquals("GFID inActive in CRMS for the given credit facility Identifier", LPDControlConstants.INACTIVE_GFID);
+    }
 
-        String expected = "PartyRelation(identifier=1, partyRoleCode=ROLE123, ...)";
-        assertTrue(partyRelation.toString().contains("identifier=1"));
-        assertTrue(partyRelation.toString().contains("partyRoleCode=ROLE123"));
+    @Test
+    void testLpdValueMissingConstant() {
+        assertEquals("Mandatory LPD value missing/Invalid", LPDControlConstants.LPD_VALUE_MISSING);
+    }
+
+    @Test
+    void testNullValueConstant() {
+        assertNull(LPDControlConstants.NULL_VALUE);
     }
 }
