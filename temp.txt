@@ -1,94 +1,36 @@
-package com.abnamro.crms.lpdrisksignaladministration.consumer;
+package com.abnamro.crms.lpdrisksignaladministration.config;
 
-import com.abnamro.crms.lpdrisksignaladministration.constants.LPDControlConstants;
-import com.abnamro.crms.lpdrisksignaladministration.dto.LPDRiskSignalDTO;
-import com.abnamro.crms.lpdrisksignaladministration.service.LPDRiskSignalServiceIntl;
-import com.abnamro.crms.lpdrisksignaladministration.service.LPDControlService;
-import com.abnamro.crms.lpdrisksignaladministration.utility.LPDRiskSignalUtility;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.kafka.support.Acknowledgment;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.env.Environment;
 
-import javax.naming.NamingException;
-import java.util.Collections;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
-class LPDRiskSignalReceiverIntlTest {
+@ExtendWith(MockitoExtension.class)
+public class ServiceBusPropertiesTest {
 
     @Mock
-    private LPDRiskSignalServiceIntl lpdRiskSignalServiceIntl;
-
-    @Mock
-    private LPDRiskSignalUtility lpdRiskSignalUtility;
-
-    @Mock
-    private LPDControlService lpdControlService;
-
-    @Mock
-    private Acknowledgment acknowledgment;
+    private Environment env;
 
     @InjectMocks
-    private LPDRiskSignalReceiverIntl lpdRiskSignalReceiverIntl;
+    private ServiceBusProperties serviceBusProperties;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        when(env.getProperty("spring.cloud.azure.credential.client-id")).thenReturn("test-client-id");
+        when(env.getProperty("spring.cloud.azure.servicebus.namespace")).thenReturn("test-namespace");
+        when(env.getProperty("event.writer.queue")).thenReturn("test-queue");
     }
 
     @Test
-    void testConsumeJsonValidMessage() throws Exception {
-        String validJsonMessage = "{\"creditFacilities\": [{\"id\":\"CF1\"}], \"currentAccounts\": []}";
-        LPDRiskSignalDTO mockDto = mock(LPDRiskSignalDTO.class);
-        when(lpdRiskSignalUtility.getSanitizedJson(validJsonMessage)).thenReturn(mockDto);
-        when(mockDto.getCreditFacilities()).thenReturn(List.of(new CreditFacilityDTO()));
-        when(mockDto.getCurrentAccounts()).thenReturn(Collections.emptyList());
-
-        lpdRiskSignalReceiverIntl.consumeJson(validJsonMessage, acknowledgment);
-
-        verify(acknowledgment).acknowledge();
-        verify(lpdRiskSignalServiceIntl).saveLPDRiskSignalIntl(anyList(), anyList(), eq(validJsonMessage));
-        verify(lpdControlService, never()).logLPDControlError(anyString(), anyString(), anyString());
-    }
-
-    @Test
-    void testConsumeJsonEmptyCreditFacilities() throws Exception {
-        String validJsonMessage = "{\"creditFacilities\": [], \"currentAccounts\": []}";
-        LPDRiskSignalDTO mockDto = mock(LPDRiskSignalDTO.class);
-        when(lpdRiskSignalUtility.getSanitizedJson(validJsonMessage)).thenReturn(mockDto);
-        when(mockDto.getCreditFacilities()).thenReturn(Collections.emptyList());
-
-        lpdRiskSignalReceiverIntl.consumeJson(validJsonMessage, acknowledgment);
-
-        verify(acknowledgment).acknowledge();
-        verify(lpdControlService).logLPDControlError(eq(validJsonMessage), eq(LPDControlConstants.NO_CF_ENTITY), eq(LPDControlConstants.NULL));
-        verify(lpdRiskSignalServiceIntl, never()).saveLPDRiskSignalIntl(anyList(), anyList(), anyString());
-    }
-
-    @Test
-    void testConsumeJsonInvalidMessage() throws Exception {
-        String invalidJsonMessage = "invalid_json";
-
-        lpdRiskSignalReceiverIntl.consumeJson(invalidJsonMessage, acknowledgment);
-
-        verify(acknowledgment).acknowledge();
-        verify(lpdControlService).logLPDControlError(eq(invalidJsonMessage), eq(LPDControlConstants.INVALID_JSON), eq(LPDControlConstants.NULL));
-        verify(lpdRiskSignalServiceIntl, never()).saveLPDRiskSignalIntl(anyList(), anyList(), anyString());
-    }
-
-    @Test
-    void testIsJsonValid() {
-        assertTrue(LPDRiskSignalReceiverIntl.isJson("{\"key\":\"value\"}"));
-    }
-
-    @Test
-    void testIsJsonInvalid() {
-        assertFalse(LPDRiskSignalReceiverIntl.isJson("invalid_json"));
+    void testProperties() {
+        assertEquals("test-client-id", serviceBusProperties.getCredentialClientId());
+        assertEquals("test-namespace", serviceBusProperties.getServiceBusNamespace());
+        assertEquals("test-queue", serviceBusProperties.getRsdQueue());
     }
 }
