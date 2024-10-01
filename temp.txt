@@ -3,66 +3,50 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import java.math.BigDecimal;
-import java.util.Date;
 
-class LPDRiskSignalTest {
+class PartyTest {
 
     @InjectMocks
-    private LPDRiskSignal lpdriskSignal;
+    private Party party;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        lpdriskSignal = new LPDRiskSignal();
+        party = new Party();
     }
 
     @Test
     void testGettersAndSetters() {
-        lpdriskSignal.setSignalIdentifier(1);
-        lpdriskSignal.setSubjectId("S123");
-        lpdriskSignal.setSubjectContext("Context");
-        lpdriskSignal.setSubjectAdditionalContext("Additional Context");
-        lpdriskSignal.setOriginalLifetimePD(BigDecimal.valueOf(0.05));
-        lpdriskSignal.setResidualLifetimePD(BigDecimal.valueOf(0.03));
-        lpdriskSignal.setClientSegmentLevel("High");
-        lpdriskSignal.setDetrorationFlag("Y");
-        lpdriskSignal.setAdministrationStatus("Active");
-        lpdriskSignal.setPopulationTimestamp(new Date());
-        lpdriskSignal.setLpdVersion(1);
+        party.setIdentifier(1);
+        party.setPartyId("P001");
+        party.setPartyRoleCode("ROLE123");
 
-        assertEquals(1, lpdriskSignal.getSignalIdentifier());
-        assertEquals("S123", lpdriskSignal.getSubjectId());
-        assertEquals("Context", lpdriskSignal.getSubjectContext());
-        assertEquals("Additional Context", lpdriskSignal.getSubjectAdditionalContext());
-        assertEquals(BigDecimal.valueOf(0.05), lpdriskSignal.getOriginalLifetimePD());
-        assertEquals(BigDecimal.valueOf(0.03), lpdriskSignal.getResidualLifetimePD());
-        assertEquals("High", lpdriskSignal.getClientSegmentLevel());
-        assertEquals("Y", lpdriskSignal.getDetrorationFlag());
-        assertEquals("Active", lpdriskSignal.getAdministrationStatus());
-        assertNotNull(lpdriskSignal.getPopulationTimestamp());
-        assertEquals(1, lpdriskSignal.getLpdVersion());
+        assertEquals(1, party.getIdentifier());
+        assertEquals("P001", party.getPartyId());
+        assertEquals("ROLE123", party.getPartyRoleCode());
     }
 
     @Test
     void testEqualsAndHashCode() {
-        LPDRiskSignal signal1 = new LPDRiskSignal();
-        LPDRiskSignal signal2 = new LPDRiskSignal();
+        Party party1 = new Party();
+        Party party2 = new Party();
 
-        signal1.setSignalIdentifier(1);
-        signal2.setSignalIdentifier(1);
+        party1.setIdentifier(1);
+        party2.setIdentifier(1);
 
-        assertEquals(signal1, signal2);
-        assertEquals(signal1.hashCode(), signal2.hashCode());
+        assertEquals(party1, party2);
+        assertEquals(party1.hashCode(), party2.hashCode());
     }
 
     @Test
     void testToString() {
-        lpdriskSignal.setSignalIdentifier(1);
-        lpdriskSignal.setSubjectId("S123");
+        party.setIdentifier(1);
+        party.setPartyId("P001");
+        party.setPartyRoleCode("ROLE123");
 
-        String expected = "LPDRiskSignal(signalIdentifier=1, subjectId=S123, ...)";
-        assertTrue(lpdriskSignal.toString().contains("signalIdentifier=1"));
-        assertTrue(lpdriskSignal.toString().contains("subjectId=S123"));
+        String expected = "Party(identifier=1, partyId=P001, partyRoleCode=ROLE123)";
+        assertTrue(party.toString().contains("identifier=1"));
+        assertTrue(party.toString().contains("partyId=P001"));
+        assertTrue(party.toString().contains("partyRoleCode=ROLE123"));
     }
 }
