@@ -1,36 +1,38 @@
 package com.abnamro.crms.lpdrisksignaladministration.config;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
+import com.azure.identity.ManagedIdentityCredentialBuilder;
+import com.azure.messaging.servicebus.ServiceBusClientBuilder;
+import com.azure.messaging.servicebus.ServiceBusSenderClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.env.Environment;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ServiceBusPropertiesTest {
+public class ServiceBusConfigTest {
 
     @Mock
-    private Environment env;
+    private ServiceBusProperties serviceBusProperties;
 
     @InjectMocks
-    private ServiceBusProperties serviceBusProperties;
+    private ServiceBusConfig serviceBusConfig;
 
     @BeforeEach
     void setUp() {
-        when(env.getProperty("spring.cloud.azure.credential.client-id")).thenReturn("test-client-id");
-        when(env.getProperty("spring.cloud.azure.servicebus.namespace")).thenReturn("test-namespace");
-        when(env.getProperty("event.writer.queue")).thenReturn("test-queue");
+        when(serviceBusProperties.getCredentialClientId()).thenReturn("test-client-id");
+        when(serviceBusProperties.getServiceBusNamespace()).thenReturn("test-namespace");
+        when(serviceBusProperties.getRsdQueue()).thenReturn("test-queue");
     }
 
     @Test
-    void testProperties() {
-        assertEquals("test-client-id", serviceBusProperties.getCredentialClientId());
-        assertEquals("test-namespace", serviceBusProperties.getServiceBusNamespace());
-        assertEquals("test-queue", serviceBusProperties.getRsdQueue());
+    void testServiceBusConfigInitialization() {
+        ServiceBusConfig config = ServiceBusConfig.getInstance(serviceBusProperties);
+        assertNotNull(config);
+        assertNotNull(config.getSenderClient());
     }
 }
