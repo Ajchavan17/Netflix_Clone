@@ -3,35 +3,135 @@ package com.abnamro.crms.lpdrisksignaladministration.constants;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-class LPDControlConstantsTest {
+class LPDRiskSignalConstantsTest {
 
     @Test
-    void testInvalidJsonConstant() {
-        assertEquals("Invalid input message/ unable to parse json", LPDControlConstants.INVALID_JSON);
+    void testSubjectContext() {
+        assertEquals("CREDIT_FACILITY_AGREEMENT", LPDRiskSignalConstants.SUBJECT_CONTEXT);
     }
 
     @Test
-    void testNoCfEntityConstant() {
-        assertEquals("Input not recognised by CRMS", LPDControlConstants.NO_CF_ENTITY);
+    void testAdministrationStatusActive() {
+        assertEquals("ACTIVE", LPDRiskSignalConstants.ADMINISTRATION_STATUS_ACTIVE);
     }
 
     @Test
-    void testNoGfidConstant() {
-        assertEquals("GFID not present/empty", LPDControlConstants.NO_GFID);
+    void testAdministrationStatusClosed() {
+        assertEquals("CLOSED", LPDRiskSignalConstants.ADMINISTRATION_STATUS_CLOSED);
     }
 
     @Test
-    void testInactiveGfidConstant() {
-        assertEquals("GFID inActive in CRMS for the given credit facility Identifier", LPDControlConstants.INACTIVE_GFID);
+    void testEventCodeEC06() {
+        assertEquals("EC06", LPDRiskSignalConstants.EVENT_CODE_EC06);
     }
 
     @Test
-    void testLpdValueMissingConstant() {
-        assertEquals("Mandatory LPD value missing/Invalid", LPDControlConstants.LPD_VALUE_MISSING);
+    void testEventCodeEC07() {
+        assertEquals("ECB7", LPDRiskSignalConstants.EVENT_CODE_EC07);
     }
 
     @Test
-    void testNullValueConstant() {
-        assertNull(LPDControlConstants.NULL_VALUE);
+    void testCreditFacility() {
+        assertEquals("CF", LPDRiskSignalConstants.CREDIT_FACILITY);
+    }
+
+    @Test
+    void testCreditFacilityNA() {
+        assertEquals("NA", LPDRiskSignalConstants.CREDIT_FACILITY_NA);
+    }
+
+    @Test
+    void testLpdDeteriorationFlagY() {
+        assertEquals("", LPDRiskSignalConstants.LPD_DETRORATION_FLAG_Y);
+    }
+
+    @Test
+    void testConsumerGroupIdConstant() {
+        assertEquals("CRMS_LPD_READ_01", LPDRiskSignalConstants.CONSUMER_GROUP_ID_CONSTANT);
+    }
+
+    @Test
+    void testKafkaBootstrapServer() {
+        assertEquals("kafka.broker.server", LPDRiskSignalConstants.KAFKA_BOOTSTRAP_SERVER);
+    }
+
+    @Test
+    void testLpdInitialRun() {
+        assertEquals("lpd.initial.run", LPDRiskSignalConstants.LPD_INITIAL_RUN);
+    }
+
+    @Test
+    void testSessionTimeoutMsConfig() {
+        assertEquals(39999, LPDRiskSignalConstants.SESSION_TIMEOUT_MS_CONFIG);
+    }
+
+    @Test
+    void testSecurityProtocol() {
+        assertEquals("security.protocol", LPDRiskSignalConstants.SECURITY_PROTOCOL);
+    }
+
+    @Test
+    void testSaslSsl() {
+        assertEquals("SASL_SSL", LPDRiskSignalConstants.SASL_SSL);
+    }
+
+    @Test
+    void testSaslMechanism() {
+        assertEquals("sasl.mechanism", LPDRiskSignalConstants.SASL_MECHANISM);
+    }
+
+    @Test
+    void testPlain() {
+        assertEquals("PLAIN", LPDRiskSignalConstants.PLAIN);
+    }
+
+    @Test
+    void testSaslJaasConfig() {
+        assertEquals("org.apache.kafka.common.security.plain.PlainLoginModule required username=crasusr password=", LPDRiskSignalConstants.SASL_JAAS_CONFIG);
+    }
+
+    @Test
+    void testSslTrustStore() {
+        assertEquals("ssl.truststore.location", LPDRiskSignalConstants.SSL_TRUST_STORE);
+    }
+
+    @Test
+    void testSslTrustStorePwd() {
+        assertEquals("ssl.truststore.password", LPDRiskSignalConstants.SSL_TRUST_STORE_PWD);
+    }
+
+    @Test
+    void testKafkaPwd() {
+        assertEquals("KAFKA_PWD", LPDRiskSignalConstants.KAFKA_PWD);
+    }
+
+    @Test
+    void testKafkaTrustPwd() {
+        assertEquals("KAFKA_TRUST_PWD", LPDRiskSignalConstants.KAFKA_TRUST_PWD);
+    }
+
+    @Test
+    void testDebtor() {
+        assertEquals("DEBTOR", LPDRiskSignalConstants.DEBTOR);
+    }
+
+    @Test
+    void testCreditAgreement() {
+        assertEquals("CREDIT_AGREEMENT", LPDRiskSignalConstants.CREDIT_AGREEMENT);
+    }
+
+    @Test
+    void testScaleValue() {
+        assertEquals(8, LPDRiskSignalConstants.SCALE_VALUE);
+    }
+
+    @Test
+    void testEventType() {
+        assertEquals("LPD_RISK_SIGNAL_HAS_CHANGED", LPDRiskSignalConstants.EVENT_TYPE);
+    }
+
+    @Test
+    void testEventPublisherId() {
+        assertEquals("AAB_SYS_824961", LPDRiskSignalConstants.EVENT_PUBLISHER_ID);
     }
 }
