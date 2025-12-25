@@ -1,0 +1,80 @@
+Sub SyncHolidays_ShortMonthNames()
+    Dim wsOverview As Worksheet, wsMonth As Worksheet
+    Dim lastRowOv As Long, lastColOv As Long, r As Long, c As Long
+    Dim holidayDate As Variant, holidayDay As Integer, holidayMonthName As String
+    Dim locNameOv As String, holidayCode As String
+    Dim lastRowMonth As Long, dateCol As Long, empRow As Long, d As Long
+    Dim countUpdated As Long: countUpdated = 0
+
+    Set wsOverview = ThisWorkbook.Sheets("Overview")
+    lastRowOv = wsOverview.Cells(wsOverview.Rows.Count, "B").End(xlUp).Row
+    lastColOv = wsOverview.Cells(9, wsOverview.Columns.Count).End(xlToLeft).Column
+    
+    Application.ScreenUpdating = False
+    Application.Calculation = xlCalculationManual
+
+    ' 1. Loop through Overview Rows
+    For r = 10 To lastRowOv
+        holidayDate = wsOverview.Cells(r, 2).Value
+        
+        If IsDate(holidayDate) Then
+            holidayDay = Day(holidayDate)
+            
+            ' CHANGE HERE: "mmm" creates short names like Jan, Feb, Mar
+            holidayMonthName = Format(holidayDate, "mmm")
+            
+            ' 2. Locate the Month Sheet
+            Set wsMonth = Nothing
+            On Error Resume Next
+            Set wsMonth = ThisWorkbook.Sheets(holidayMonthName)
+            On Error GoTo 0
+            
+            If Not wsMonth Is Nothing Then
+                ' 3. Loop through Location Columns in Overview
+                For c = 6 To lastColOv
+                    locNameOv = Trim(wsOverview.Cells(9, c).Value)
+                    holidayCode = Trim(wsOverview.Cells(r, c).Value)
+                    
+                    If holidayCode = "H" Or holidayCode = "OH" Then
+                        ' 4. Find Date Column in Month Sheet Row 8
+                        dateCol = 0
+                        For d = 5 To 35
+                            ' Check value or displayed text
+                            If wsMonth.Cells(8, d).Value = holidayDay Or _
+                               wsMonth.Cells(8, d).Text = CStr(holidayDay) Then
+                                dateCol = d
+                                Exit For
+                            End If
+                        Next d
+                        
+                        ' 5. If Date Column found, Update Employees
+                        If dateCol > 0 Then
+                            lastRowMonth = wsMonth.Cells(wsMonth.Rows.Count, "C").End(xlUp).Row
+                            For empRow = 9 To lastRowMonth
+                                ' Compare Locations (Case-Insensitive)
+                                If StrComp(Trim(wsMonth.Cells(empRow, 3).Value), locNameOv, vbTextCompare) = 0 Then
+                                    ' Fill only if empty
+                                    If wsMonth.Cells(empRow, dateCol).Value = "" Then
+                                        wsMonth.Cells(empRow, dateCol).Value = holidayCode
+                                        countUpdated = countUpdated + 1
+                                    End If
+                                End If
+                            Next empRow
+                        End If
+                    End If
+                Next c
+            End If
+        End If
+    Next r
+
+    Application.Calculation = xlCalculationAutomatic
+    Application.ScreenUpdating = True
+
+    If countUpdated > 0 Then
+        MsgBox "Successfully updated " & countUpdated & " holiday cells!", vbInformation
+    Else
+        MsgBox "No updates made. Check:" & vbCrLf & _
+               "1. Are sheet names exactly 3 letters (e.g., 'Jan', 'Feb')?" & vbCrLf & _
+               "2. Are Locations in Column C of the month sheets matching the Overview header?", vbExclamation
+    End If
+End Sub
