@@ -1,38 +1,876 @@
-package com.abnamro.crms.lpdrisksignaladministration.config;
+You are a senior Python full-stack developer and QA automation engineer.
 
-import com.azure.identity.ManagedIdentityCredentialBuilder;
-import com.azure.messaging.servicebus.ServiceBusClientBuilder;
-import com.azure.messaging.servicebus.ServiceBusSenderClient;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+Build a complete, production-quality LOCAL WEB APPLICATION called:
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+"QA Test Case Document Generator"
 
-@ExtendWith(MockitoExtension.class)
-public class ServiceBusConfigTest {
+The application is intended for QA testers who maintain test case designs in Excel and need to automatically generate professionally formatted Microsoft Word test-case documents.
 
-    @Mock
-    private ServiceBusProperties serviceBusProperties;
+IMPORTANT:
+- This is a LOCAL application.
+- It must run on Windows.
+- No cloud services.
+- No external database.
+- No authentication/login.
+- No internet connection should be required while using the application.
+- Keep the architecture lightweight and maintainable.
+- Do NOT use React, Angular, Vue, Node.js, Docker, or any heavy frontend framework.
+- Use Python Flask for the backend.
+- Use HTML, CSS and vanilla JavaScript for the frontend.
+- Use openpyxl for Excel processing.
+- Use python-docx for Word document generation.
+- Use Python's zipfile module for ZIP generation.
 
-    @InjectMocks
-    private ServiceBusConfig serviceBusConfig;
+==================================================
+1. TECHNOLOGY STACK
+==================================================
 
-    @BeforeEach
-    void setUp() {
-        when(serviceBusProperties.getCredentialClientId()).thenReturn("test-client-id");
-        when(serviceBusProperties.getServiceBusNamespace()).thenReturn("test-namespace");
-        when(serviceBusProperties.getRsdQueue()).thenReturn("test-queue");
-    }
+Backend:
+- Python 3.11+
+- Flask
+- openpyxl
+- python-docx
 
-    @Test
-    void testServiceBusConfigInitialization() {
-        ServiceBusConfig config = ServiceBusConfig.getInstance(serviceBusProperties);
-        assertNotNull(config);
-        assertNotNull(config.getSenderClient());
-    }
-}
+Frontend:
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- No frontend framework
+- Responsive modern UI
+
+Application structure should preferably be:
+
+QA-TestCase-Generator/
+│
+├── app.py
+├── requirements.txt
+├── README.md
+├── start.bat
+│
+├── templates/
+│   └── index.html
+│
+├── static/
+│   ├── style.css
+│   └── script.js
+│
+├── uploads/
+└── output/
+
+Keep the code modular inside app.py where practical, but do not over-engineer the project.
+
+==================================================
+2. MAIN USER WORKFLOW
+==================================================
+
+The workflow should be:
+
+1. User starts the application using start.bat.
+2. Flask server starts locally.
+3. Browser automatically opens:
+   http://127.0.0.1:5000
+4. User uploads an Excel test case design file.
+5. Application validates the Excel headers.
+6. Application reads only the required columns.
+7. Application identifies individual TestCaseId groups.
+8. Application displays all detected test cases.
+9. User can select/deselect test cases.
+10. User clicks "Generate Word Documents".
+11. Application generates one DOCX file per TestCaseId.
+12. Each test case is formatted professionally.
+13. Every test step starts on a NEW PAGE.
+14. Each step contains a clearly visible screenshot placeholder.
+15. Application shows generation progress.
+16. When complete, user can download:
+    - individual DOCX files
+    - OR all generated documents as a ZIP file.
+
+==================================================
+3. REQUIRED EXCEL COLUMNS
+==================================================
+
+ONLY these 9 Excel columns should be processed:
+
+1. Priority
+2. TestCaseId
+3. PreCondition
+4. TestCaseSummary
+5. TestCaseDescription
+6. Step Name
+7. Test Step
+8. Data
+9. Expected Result
+
+Ignore all other Excel columns.
+
+IMPORTANT:
+Do NOT depend on Excel column letters.
+
+Find columns using their HEADER NAMES.
+
+For example, if TestCaseId is in column J today and column C tomorrow, the application must still work.
+
+Header matching should be reasonably tolerant of:
+- leading/trailing spaces
+- different capitalization
+
+For example:
+"TestCaseId"
+"Test Case ID"
+"testcaseid"
+
+can optionally be normalized if practical.
+
+The application must clearly report missing required columns.
+
+Example:
+
+Excel Validation
+
+✓ Priority
+✓ TestCaseId
+✓ PreCondition
+✓ TestCaseSummary
+✓ TestCaseDescription
+✓ Step Name
+✓ Test Step
+✓ Data
+✓ Expected Result
+
+All required columns found.
+
+If a column is missing:
+
+✕ Expected Result
+
+Please correct the Excel file and upload it again.
+
+==================================================
+4. EXCEL DATA STRUCTURE
+==================================================
+
+The Excel file contains multiple rows belonging to the same TestCaseId.
+
+Example:
+
+Priority | TestCaseId | PreCondition | TestCaseSummary | TestCaseDescription | Step Name | Test Step | Data | Expected Result
+
+High | TC-01 | User logged in | Claims validation | Verify claims... | 1 | Login to portal | Provider credentials | Dashboard displayed
+     |       |                |                 |                  | 2 | Navigate to Message Center | Valid criteria | Search page displayed
+     |       |                |                 |                  | 3 | Locate Claims details | | Header displayed
+     |       |                |                 |                  | 4 | Click expand | | Section expands
+
+High | TC-02 | User logged in | Another test | Verify... | 1 | Open page | URL | Page displayed
+     |       |                |                 |          | 2 | Inspect header | | Header correct
+
+The TestCaseId, Priority, PreCondition, TestCaseSummary and TestCaseDescription may only be populated on the first row of a test case.
+
+The application must propagate/use the first non-empty value for the test-case-level fields.
+
+A new TestCaseId indicates the start of a new test case.
+
+All subsequent rows until the next TestCaseId belong to the previous test case.
+
+==================================================
+5. EXCEL PREVIEW
+==================================================
+
+After upload, display a summary:
+
+File:
+DIP-28599_TestCaseDesign_v1.xlsx
+
+Test Cases Found:
+24
+
+Total Steps:
+137
+
+Then display a table/list of detected test cases:
+
+☑ TC-01    Claims details accordion
+☑ TC-02    Updated claims section
+☑ TC-03    Provider search
+...
+
+Allow:
+
+[ Select All ]
+[ Deselect All ]
+
+Each test case should have a checkbox.
+
+Show the number selected:
+
+"12 of 24 test cases selected"
+
+==================================================
+6. MODERN UI
+==================================================
+
+Create a professional QA-oriented interface.
+
+Design should be clean and modern.
+
+Use:
+- Card-based layout
+- Rounded corners
+- Subtle shadows
+- Clear typography
+- Good spacing
+- Professional blue/neutral theme
+- Responsive layout
+- Clear buttons
+- Icons using simple Unicode characters or CSS; do not depend on internet icon libraries.
+
+Main sections:
+
+HEADER
+--------------------------------
+QA Test Case Document Generator
+Excel → Word Automation
+
+UPLOAD CARD
+--------------------------------
+Drag & Drop Excel File
+
+or
+
+[ Browse Excel File ]
+
+SUPPORTED:
+.xlsx / .xls
+
+After upload:
+
+FILE INFORMATION CARD
+--------------------------------
+✓ File loaded
+Filename
+Test Cases
+Steps
+
+TEST CASE SELECTION
+--------------------------------
+Test Cases
+[ Select All ] [ Deselect All ]
+
+☑ TC-01
+☑ TC-02
+☐ TC-03
+
+GENERATION
+--------------------------------
+[ Generate Word Documents ]
+
+PROGRESS
+--------------------------------
+Generating...
+
+████████████████░░░░ 75%
+
+15 / 20 test cases generated
+
+STATUS
+--------------------------------
+✓ TC-01.docx
+✓ TC-02.docx
+⟳ TC-03.docx
+
+COMPLETION
+--------------------------------
+✓ Generation completed
+
+20 documents generated
+137 steps processed
+
+[ Download All as ZIP ]
+
+==================================================
+7. DRAG AND DROP
+==================================================
+
+Implement drag-and-drop Excel upload.
+
+The upload area should visually react when a file is dragged over it.
+
+Also provide:
+
+[ Browse File ]
+
+Validate extension.
+
+Allowed:
+.xlsx
+.xls
+
+Show a friendly error for unsupported files.
+
+==================================================
+8. TEST CASE GROUPING
+==================================================
+
+Create a robust grouping algorithm.
+
+Example:
+
+Row 2:
+TestCaseId = TC-01
+
+Rows 3-6:
+TestCaseId blank
+
+Rows 7:
+TestCaseId = TC-02
+
+Rows 8-10:
+TestCaseId blank
+
+Result:
+
+TC-01
+  Step 1
+  Step 2
+  Step 3
+  Step 4
+
+TC-02
+  Step 1
+  Step 2
+  Step 3
+
+Do not treat blank TestCaseId rows as separate test cases.
+
+Ignore completely empty rows.
+
+Handle blank values safely.
+
+==================================================
+9. WORD DOCUMENT GENERATION
+==================================================
+
+Use python-docx.
+
+Generate ONE DOCX PER TEST CASE.
+
+Filename:
+
+TC-01.docx
+TC-02.docx
+TC-03.docx
+
+Sanitize filenames so invalid Windows filename characters do not cause errors.
+
+==================================================
+10. WORD DOCUMENT DESIGN
+==================================================
+
+The generated Word document must look professional and suitable for QA execution.
+
+Use:
+- A4 page size
+- Normal margins
+- Professional font such as Aptos or Calibri
+- Consistent heading styles
+- Borders
+- Shading where appropriate
+- Good spacing
+- Tables with readable widths
+- Header/footer if appropriate
+- Page numbers if practical
+
+==================================================
+11. WORD DOCUMENT FIRST PAGE
+==================================================
+
+At the top:
+
+QA TEST CASE
+
+Test Case ID: TC-01
+
+Then create a test-case information table.
+
+Example:
+
+--------------------------------------------------
+| Field                | Details                 |
+--------------------------------------------------
+| Priority             | High                    |
+--------------------------------------------------
+| Test Case ID         | TC-01                   |
+--------------------------------------------------
+| Pre-Condition        | User is logged in...    |
+--------------------------------------------------
+| Test Case Summary    | Claims validation       |
+--------------------------------------------------
+| Test Case Description| Verify that...          |
+--------------------------------------------------
+
+The table should be professionally formatted.
+
+Do not allow text to become unreadable.
+
+Long text should wrap inside cells.
+
+==================================================
+12. TEST STEP FORMAT
+==================================================
+
+After the test-case information, create each step.
+
+IMPORTANT:
+EVERY TEST STEP MUST START ON A NEW PAGE.
+
+Example:
+
+PAGE 1
+
+TEST CASE INFORMATION
+
+[table]
+
+Then:
+
+PAGE 2
+
+TEST STEP 1
+
+Step Name:
+1
+
+Test Step:
+Log in to Provider Portal
+
+Data:
+Provider credentials
+
+Expected Result:
+Provider Portal Home / Dashboard is displayed
+
+SCREENSHOT
+
+┌──────────────────────────────────────────────┐
+│                                              │
+│              SCREENSHOT AREA                 │
+│                                              │
+│     Paste execution screenshot here         │
+│                                              │
+│                                              │
+└──────────────────────────────────────────────┘
+
+PAGE BREAK
+
+PAGE 3
+
+TEST STEP 2
+
+...
+
+Each step must have its own page.
+
+==================================================
+13. SCREENSHOT PLACEHOLDER
+==================================================
+
+Create a large bordered placeholder after the Expected Result.
+
+Example:
+
+SCREENSHOT / EVIDENCE
+
++------------------------------------------------+
+|                                                |
+|                                                |
+|                                                |
+|          Paste Screenshot Here                 |
+|                                                |
+|                                                |
+|                                                |
++------------------------------------------------+
+
+Make it large enough for a QA engineer to paste a screenshot.
+
+The placeholder should NOT be an actual image.
+
+Use a formatted table/cell or another reliable python-docx technique.
+
+==================================================
+14. STEP TABLE
+==================================================
+
+Each step should preferably use a table like:
+
+--------------------------------------------------
+| Step Name                                      |
+--------------------------------------------------
+| 1                                              |
+--------------------------------------------------
+
+--------------------------------------------------
+| Test Step                                      |
+--------------------------------------------------
+| Log in to Provider Portal                      |
+--------------------------------------------------
+
+--------------------------------------------------
+| Data                                           |
+--------------------------------------------------
+| Provider credentials                           |
+--------------------------------------------------
+
+--------------------------------------------------
+| Expected Result                                |
+--------------------------------------------------
+| Provider Portal Home / Dashboard displayed     |
+--------------------------------------------------
+
+Then screenshot placeholder.
+
+Alternatively, create one two-column table:
+
+| Field | Details |
+|-------|---------|
+| Step Name | 1 |
+| Test Step | ... |
+| Data | ... |
+| Expected Result | ... |
+
+Use whichever produces the cleanest Word output.
+
+==================================================
+15. EMPTY VALUES
+==================================================
+
+If Data is blank:
+
+Display:
+
+N/A
+
+or:
+
+Not specified
+
+Do not leave broken formatting.
+
+If PreCondition etc. are blank, display "N/A".
+
+==================================================
+16. GENERATION PROGRESS
+==================================================
+
+The frontend must show real generation progress.
+
+Example:
+
+Generating Test Cases...
+
+TC-01 ✓
+TC-02 ✓
+TC-03 ⟳
+
+Progress:
+██████████████░░░░░░ 70%
+
+17 / 24 completed
+
+Use Flask endpoints/AJAX/fetch or another lightweight mechanism.
+
+Do not fake the progress bar.
+
+The progress should correspond to actual test cases being processed.
+
+==================================================
+17. ZIP DOWNLOAD
+==================================================
+
+After generation:
+
+Create:
+
+Generated_TestCases.zip
+
+containing:
+
+TC-01.docx
+TC-02.docx
+TC-03.docx
+...
+
+Provide:
+
+[ Download All as ZIP ]
+
+Also allow downloading individual documents if practical.
+
+==================================================
+18. ERROR HANDLING
+==================================================
+
+Handle:
+
+- No file uploaded
+- Invalid file type
+- Corrupted Excel
+- Missing columns
+- Empty Excel
+- No TestCaseId
+- TestCaseId with no steps
+- Invalid characters in TestCaseId
+- Word generation errors
+- Permission errors
+- Large Excel files
+
+Show user-friendly messages.
+
+Never display a Python traceback to the normal user.
+
+Log technical errors to the terminal/log file.
+
+==================================================
+19. SECURITY / FILE HANDLING
+==================================================
+
+Since this is a local application:
+
+- Restrict uploads to Excel files
+- Use secure filenames
+- Store uploads temporarily
+- Store generated documents in output/
+- Avoid arbitrary filesystem access
+- Clean temporary files where appropriate
+
+Do not send uploaded data anywhere.
+
+==================================================
+20. START.BAT
+==================================================
+
+Create start.bat for Windows.
+
+It should:
+
+1. Check whether Python is installed.
+2. Create a virtual environment if necessary.
+3. Activate it.
+4. Install requirements if necessary.
+5. Start Flask.
+6. Open the browser automatically.
+
+Ideally the user should be able to double-click:
+
+start.bat
+
+and the application starts.
+
+Do not require the user to manually type Python commands.
+
+==================================================
+21. REQUIREMENTS.TXT
+==================================================
+
+Include only required dependencies, for example:
+
+Flask
+openpyxl
+python-docx
+
+Use compatible versions if appropriate.
+
+==================================================
+22. README
+==================================================
+
+Create a complete README.md explaining:
+
+- What the application does
+- Features
+- Requirements
+- Installation
+- How to run
+- How to upload Excel
+- Excel column requirements
+- How documents are generated
+- Output location
+- Troubleshooting
+
+Include an example Excel structure.
+
+==================================================
+23. API DESIGN
+==================================================
+
+Create simple Flask endpoints such as:
+
+GET /
+POST /upload
+POST /generate
+GET /download/<filename>
+GET /download-all
+
+You may modify the endpoints if a better simple architecture is appropriate.
+
+Use JSON responses for AJAX endpoints.
+
+==================================================
+24. FRONTEND JAVASCRIPT
+==================================================
+
+Implement:
+
+- Drag/drop upload
+- File validation
+- Upload progress if practical
+- Excel validation display
+- Test-case list
+- Select All
+- Deselect All
+- Selected count
+- Generate button
+- Real progress updates
+- Success/error notifications
+- Download buttons
+- Reset/New File functionality
+
+Prevent generation until:
+- Excel is valid
+- At least one test case is selected
+
+==================================================
+25. RESET
+==================================================
+
+Add:
+
+[ Upload New Excel ]
+
+This should reset the UI and allow another Excel file to be processed.
+
+==================================================
+26. IMPORTANT EXCEL COMPATIBILITY
+==================================================
+
+Do not hard-code:
+- Column letters
+- Number of rows
+- Number of test cases
+- Step count
+
+Everything must be dynamically detected.
+
+The application should work with 10 test cases or 1,000 test cases, subject to normal machine limitations.
+
+==================================================
+27. CODE QUALITY
+==================================================
+
+Write clean, readable code.
+
+Use functions such as:
+
+load_excel()
+validate_headers()
+normalize_headers()
+parse_test_cases()
+generate_word_document()
+generate_step_section()
+create_screenshot_placeholder()
+create_zip()
+sanitize_filename()
+
+Add comments where logic is non-obvious.
+
+Use proper exception handling.
+
+Avoid unnecessary global variables.
+
+==================================================
+28. IMPORTANT WORD FORMATTING DETAILS
+==================================================
+
+Pay special attention to:
+
+- Tables fitting within A4 page width
+- No text overflowing
+- Long Test Steps wrapping
+- Long Expected Results wrapping
+- Long Data values wrapping
+- Consistent fonts
+- Table borders
+- Cell vertical alignment
+- Page breaks
+- Screenshot placeholder size
+- Header/footer
+- Page numbers
+- Avoiding accidental blank pages
+
+The final DOCX should look like a professionally prepared QA execution document, not a raw Excel export.
+
+==================================================
+29. FUTURE EXTENSIBILITY
+==================================================
+
+Structure the code so these features can be added later without rewriting the application:
+
+- Screenshot upload per step
+- Add screenshots directly into Word
+- Word template customization
+- Test case search/filter
+- PDF generation
+- Custom company logo
+- Custom document title
+- Custom screenshot placeholder size
+- Test case execution status
+- Actual Result field
+- Pass/Fail field
+- Comments field
+- Bulk screenshot upload
+
+Do NOT implement all future features now unless required.
+Just keep the architecture extensible.
+
+==================================================
+30. FINAL REQUIREMENT
+==================================================
+
+Generate the ENTIRE WORKING APPLICATION.
+
+Do not only provide snippets.
+
+Create all required files:
+
+app.py
+requirements.txt
+README.md
+start.bat
+templates/index.html
+static/style.css
+static/script.js
+
+Make sure imports, Flask routes, JavaScript endpoints, HTML IDs, CSS classes, and filenames all match.
+
+The application must be runnable after:
+
+pip install -r requirements.txt
+
+and:
+
+python app.py
+
+Also make start.bat work on Windows.
+
+Before finishing, review the complete application for:
+- broken imports
+- incorrect Flask routes
+- JavaScript fetch errors
+- incorrect JSON structures
+- Excel header parsing issues
+- TestCase grouping issues
+- Word formatting issues
+- ZIP generation issues
+- Windows path issues
+
+Do not leave TODO placeholders for core functionality.
+
+The final result should be a complete working local QA Test Case → Word Document Generator.
